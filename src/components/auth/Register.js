@@ -73,8 +73,10 @@ class Register extends Component {
     e.preventDefault()
 
     const newUser = {
-      email: this.state.email,
-      password: this.state.password,
+      user: {
+        email: this.state.email,
+        password: this.state.password
+      }
     }
     this.props.registerUser(newUser, this.props.history)
   }
@@ -88,7 +90,7 @@ class Register extends Component {
         <CardContent align="center">
           <TextField
             className={classes.margin + " " + classes.widthInput}
-            error={errors.email}
+            error={errors.email ? true : false}
             label="Email"
             name="email"
             type="email"
@@ -105,7 +107,7 @@ class Register extends Component {
           />
           <TextField
             className={classes.margin + " " + classes.widthInput}
-            error={errors.password}
+            error={errors.password ? true : false}
             label="Password"
             name="password"
             type="password"

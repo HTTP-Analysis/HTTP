@@ -15,6 +15,7 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import TextField from '@material-ui/core/TextField'
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import AccountCircle from '@material-ui/icons/AccountCircle'
+import EmailIcon from '@material-ui/icons/Email'
 
 const styles = theme => {
   return ({
@@ -46,11 +47,12 @@ class Register extends Component {
     this.state = {
       email: "",
       password: "",
+      fullname: "",
       errors: {}
     }
 
     this.onChange = this.onChange.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
+    this.onSubmitSignUp = this.onSubmitSignUp.bind(this)
   }
 
   componentDidMount() {
@@ -60,6 +62,10 @@ class Register extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+
     if (nextProps.errors) {
       this.setState({errors: nextProps.errors})
     }
@@ -69,11 +75,12 @@ class Register extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  onSubmit(e) {
+  onSubmitSignUp(e) {
     e.preventDefault()
 
     const newUser = {
       user: {
+        fullname: this.state.fullname,
         email: this.state.email,
         password: this.state.password
       }
@@ -90,6 +97,23 @@ class Register extends Component {
         <CardContent align="center">
           <TextField
             className={classes.margin + " " + classes.widthInput}
+            error={errors.fullname ? true : false}
+            label="Fullname"
+            name="fullname"
+            type="text"
+            helperText={errors.fullname}
+            value={this.state.fullname}
+            onChange={this.onChange}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            className={classes.margin + " " + classes.widthInput}
             error={errors.email ? true : false}
             label="Email"
             name="email"
@@ -100,7 +124,7 @@ class Register extends Component {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <AccountCircle />
+                  <EmailIcon />
                 </InputAdornment>
               ),
             }}
@@ -128,18 +152,10 @@ class Register extends Component {
           className={classes.actions}
         >
           <Button
-            variant="contained"
-            color="primary"
-            align="left"
-            fullWidth
-            className={classes.button}
-          >
-            Sign In
-          </Button>
-          <Button
             fullWidth
             align="right"
-            onClick={this.onSubmit}
+            color="primary"
+            onClick={this.onSubmitSignUp}
             className={classes.button}
             variant="contained"
           >

@@ -14,7 +14,6 @@ import Button from '@material-ui/core/Button'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import TextField from '@material-ui/core/TextField'
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
-import AccountCircle from '@material-ui/icons/AccountCircle'
 import EmailIcon from '@material-ui/icons/Email'
 
 const styles = theme => {

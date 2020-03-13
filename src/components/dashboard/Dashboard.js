@@ -7,8 +7,10 @@ import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
+import HttpIcon from '@material-ui/icons/Http';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -17,6 +19,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, useTheme } from '@material-ui/core/styles';
 
@@ -81,21 +84,21 @@ class Dashboard extends Component {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button>
+            <ListItemIcon><AddBoxIcon /></ListItemIcon>
+            <ListItemText primary="Add" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon><HttpIcon /></ListItemIcon>
+            <ListItemText primary="Requests" />
+          </ListItem>
         </List>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button>
+            <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+            <ListItemText primary="Logout" />
+          </ListItem>
         </List>
       </div>
     );
@@ -115,7 +118,7 @@ class Dashboard extends Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap>
-              Responsive drawer
+              HTTP Analysis
             </Typography>
           </Toolbar>
         </AppBar>
@@ -125,7 +128,7 @@ class Dashboard extends Component {
             <Drawer
               container={container}
               variant="temporary"
-              anchor="right"
+              anchor="left"
               open={this.state.mobileOpen}
               onClose={this.handleDrawerToggle}
               classes={{

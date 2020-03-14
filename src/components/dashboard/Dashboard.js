@@ -4,6 +4,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getRequests } from "../../actions/requestActions"
 
+import { logoutUser } from '../../actions/authActions';
+
+import AddRequest from "./AddRequest"
+
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -59,6 +63,12 @@ const styles = theme => {
 }
 
 class Dashboard extends Component {
+
+  onLogoutClick(e) {
+    e.preventDefault();
+    this.props.logoutUser();
+  }
+
   componentDidMount() {
     this.props.getRequests()
   }
@@ -81,6 +91,7 @@ class Dashboard extends Component {
     const { requests, loading } = this.props.requests
     const { classes } = this.props
     const { container } = this.props
+    console.log(this.props)
 
     const drawer = (
       <div>
@@ -89,9 +100,11 @@ class Dashboard extends Component {
         <List>
           <ListItem button>
             <ListItemIcon><AddBoxIcon /></ListItemIcon>
-            <ListItemText primary="Add" />
+            <ListItemText>
+              <AddRequest />
+            </ListItemText>
           </ListItem>
-          <ListItem button>
+          <ListItem button selected>
             <ListItemIcon><HttpIcon /></ListItemIcon>
             <ListItemText primary="Requests" />
           </ListItem>
@@ -100,7 +113,9 @@ class Dashboard extends Component {
         <List>
           <ListItem button>
             <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-            <ListItemText primary="Logout" />
+            <ListItemText onClick={this.onLogoutClick.bind(this)}>
+              Logout
+            </ListItemText>
           </ListItem>
         </List>
       </div>
@@ -169,6 +184,7 @@ Dashboard.propTypes = {
   auth: PropTypes.object.isRequired,
   getRequests: PropTypes.func.isRequired,
   container: PropTypes.any,
+  logoutUser: PropTypes.func.isRequired,
   requests: PropTypes.object.isRequired
 };
 
@@ -177,5 +193,5 @@ const mapStateToProps = state => ({
   requests: state.requests
 });
 
-export default connect(mapStateToProps, { getRequests })(withStyles(styles)(Dashboard))
+export default connect(mapStateToProps, { getRequests, logoutUser })(withStyles(styles)(Dashboard))
 

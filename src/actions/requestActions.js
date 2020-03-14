@@ -12,12 +12,12 @@ import {
 
 export const getRequests = () => dispatch => {
   dispatch(setRequestLoading());
-  axios
+  API
     .get('/api/requests')
     .then(res =>
       dispatch({
         type: GET_REQUESTS,
-        payload: res.data
+        payload: res.data.data
       })
     )
     .catch(err =>

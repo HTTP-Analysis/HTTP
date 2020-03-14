@@ -8,9 +8,6 @@ import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 import PrivateRoute from './components/common/PrivateRoute';
 
-import CssBaseline from '@material-ui/core/CssBaseline'
-import Container from '@material-ui/core/Container'
-
 import Dashboard from './components/dashboard/Dashboard'
 import Register from "./components/auth/Register"
 import Login from "./components/auth/Login"
@@ -25,7 +22,7 @@ if (localStorage.jwtToken) {
   // Check for expired token
   const currentTime = Date.now() / 1000;
   if (decoded.exp < currentTime) {
-    // store.dispatch(logoutUser());
+    store.dispatch(logoutUser());
     window.location.href = '/login';
   }
 }

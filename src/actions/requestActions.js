@@ -28,6 +28,24 @@ export const getRequests = () => dispatch => {
     );
 };
 
+export const addRequest = (requestData) => dispatch => {
+  dispatch(setRequestLoading());
+  API
+    .post("/api/requests", requestData)
+    .then(res =>
+      dispatch({
+        type: ADD_REQUEST,
+        payload: res.data.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data.errors
+      })
+    )
+}
+
 // Set loading state
 export const setRequestLoading = () => {
   return {

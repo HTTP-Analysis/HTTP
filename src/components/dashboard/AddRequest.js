@@ -14,6 +14,7 @@ import Divider from '@material-ui/core/Divider'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import AppBar from '@material-ui/core/AppBar'
 import TextField from '@material-ui/core/TextField'
+import Box from '@material-ui/core/Box';
 import InputAdornment from '@material-ui/core/InputAdornment'
 import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -23,6 +24,8 @@ import FormControl from '@material-ui/core/FormControl'
 import Toolbar from '@material-ui/core/Toolbar'
 import HttpIcon from '@material-ui/icons/Http'
 import IconButton from '@material-ui/core/IconButton'
+import DeleteIcon from '@material-ui/icons/Delete';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 import Typography from '@material-ui/core/Typography'
 import CloseIcon from '@material-ui/icons/Close'
 import Slide from '@material-ui/core/Slide'
@@ -45,6 +48,16 @@ const styles = theme => {
     },
     marginTop: {
       marginTop: "10px"
+    },
+    marginRight: {
+      marginRight: "5px"
+    },
+    deleteButton: {
+      padding: 0,
+      marginTop: "34px"
+    },
+    addRowButton: {
+      marginTop: "5px"
     }
   })
 }
@@ -63,10 +76,13 @@ class AddRequest extends Component {
       url: "",
       username: "",
       password: "",
-      auth_type: "",
-      params: {},
+      auth_type: "basic",
       errors: {},
-      addAuthInfo: false
+      addAuthInfo: false,
+      addHeaderInfo: false,
+      addParams: false,
+      headers: [{name: "", value: ""}],
+      params: [{name: "", value: ""}]
     }
 
     this.handleClickOpen = this.handleClickOpen.bind(this)
@@ -74,6 +90,77 @@ class AddRequest extends Component {
     this.onSubmitSignUp = this.onSubmitSignUp.bind(this)
     this.onChange = this.onChange.bind(this)
     this.showAuthInfo = this.showAuthInfo.bind(this)
+    this.showHeaderInfo = this.showHeaderInfo.bind(this)
+    this.showAddParams = this.showAddParams.bind(this)
+    this.clearStateAndForm = this.clearStateAndForm.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+    this.removeClick = this.removeClick.bind(this)
+    this.addClick = this.addClick.bind(this)
+  }
+
+  removeClick(i, entity){
+    let stateData = [...this.state[entity]];
+    console.log(stateData)
+    console.log(i)
+    stateData.splice(i, 1);
+    if (entity === "headers") {
+      this.setState({ headers: stateData });
+    } else {
+      this.setState({ params: stateData })
+    }
+    console.log(this.state[entity])
+  }
+
+  addClick(e, entity){
+    if (entity === "headers") {
+      this.setState(prevState => ({
+        headers: [...prevState.headers, { name: "", value: "" }]
+      }))
+    } else {
+    this.setState(prevState => ({
+      params: [...prevState.params, { name: "", value: "" }]
+    }))
+    }
+  }
+
+  handleChange(e, i, entity) {
+
+    const { name, value } = e.target;
+    let stateData = [...this.state[entity]];
+    stateData[i] = {...stateData[i], [name]: value};
+    if (entity === "headers") {
+      this.setState({ headers: stateData });
+    } else {
+      this.setState({ params: stateData })
+    }
+  }
+
+  createUI(classes, entity){
+    return this.state[entity].map((el, i) => (
+     <div key={i} style={{ display: 'inline-flex', width: "100%" }}>
+        <TextField
+          className={classes.inputMargins + " " + classes.marginTop + " " + classes.marginRight}
+          label="Name"
+          name="name"
+          type="text"
+          fullWidth
+          value={el.name ||''}
+          onChange={(e) => this.handleChange(e, i, entity)}
+        />
+        <TextField
+          className={classes.inputMargins + " " + classes.marginTop + " " + classes.marginRight}
+          label="Value"
+          name="value"
+          type="text"
+          fullWidth
+          value={el.value ||''}
+          onChange={(e) => this.handleChange(e, i, entity)}
+        />
+        <IconButton className={classes.deleteButton} onClick={(e) => this.removeClick(e, i, entity)}>
+          <DeleteIcon />
+        </IconButton>
+     </div>
+    ))
   }
 
   handleClickOpen(e) {
@@ -81,7 +168,25 @@ class AddRequest extends Component {
   }
 
   handleClickClose(e) {
-    this.setState({ open: false })
+    this.clearStateAndForm(e)
+  }
+
+  clearStateAndForm(e) {
+    this.setState({
+      open: false,
+      method: "",
+      url: "",
+      username: "",
+      password: "",
+      auth_type: "basic",
+      params: {},
+      errors: {},
+      addAuthInfo: false,
+      addHeaderInfo: false,
+      addParams: false,
+      headers: [{name: "", value: ""}],
+      params: [{name: "", value: ""}]
+    })
   }
 
   componentWillReceiveProps(newProps) {
@@ -98,15 +203,27 @@ class AddRequest extends Component {
     this.setState({ addAuthInfo: !this.state.addAuthInfo })
   }
 
+  showAddParams(e) {
+    this.setState({ addParams: !this.state.addParams })
+  }
+
   onSubmitSignUp(e) {
     e.preventDefault()
 
     const newRequest = {
       request: {
-        url: ""
+        url: this.state.url,
+        method: this.state.method,
+        auth: this.state.addAuthInfo ? {username: this.state.username, password: this.state.password, auth_type: this.state.auth_type} : {},
+        headers: this.state.addHeaderInfo ? this.state.headers : {},
+        params: this.state.addParams ? this.state.params : {}
       }
     }
     this.props.addRequest(newRequest)
+  }
+
+  showHeaderInfo(e) {
+    this.setState({ addHeaderInfo: !this.state.addHeaderInfo })
   }
 
   render() {
@@ -197,17 +314,17 @@ class AddRequest extends Component {
                   value={this.state.password}
                   onChange={this.onChange}
                 />
-                <RadioGroup value={this.state.auth} onChange={this.onChange} row>
+                <RadioGroup name="auth_type" value={this.state.auth_type} onChange={this.onChange} row>
                   <FormControlLabel
                     className={classes.radioMargin}
-                    value="Basic"
+                    value="basic"
                     control={<Radio color="primary" />}
                     labelPlacement="end"
                     label="Basic"
                   />
                   <FormControlLabel
                     className={classes.radioMargin}
-                    value="Digest"
+                    value="digest"
                     control={<Radio color="primary" />}
                     labelPlacement="end"
                     label="Digest"
@@ -215,11 +332,87 @@ class AddRequest extends Component {
                 </RadioGroup>
               </React.Fragment>
             }
+            <InputLabel id="method" className={classes.inputMargins}>Header</InputLabel>
+            <RadioGroup name="addHeaderInfo" value={this.state.addHeaderInfo} onChange={this.showHeaderInfo} row>
+              <FormControlLabel
+                className={classes.radioMargin}
+                value={true}
+                control={<Radio color="primary" />}
+                labelPlacement="end"
+                label="Yes"
+              />
+              <FormControlLabel
+                className={classes.radioMargin}
+                value={false}
+                control={<Radio color="primary" />}
+                labelPlacement="end"
+                label="No"
+              />
+            </RadioGroup>
+            {
+              this.state.addHeaderInfo &&
+              <React.Fragment>
+                <Box component="span" display="block">
+                  {this.createUI(classes, "headers")}
+                </Box>
+                <div style={{ width: '100%' }}>
+                  <Box component="span" display="block">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={(e) => this.addClick(e, "headers")}
+                      className={classes.addRowButton}
+                      startIcon={<AddBoxIcon />}
+                    >
+                      Add
+                    </Button>
+                  </Box>
+                </div>
+              </React.Fragment>
+            }
+
+            <InputLabel id="method" className={classes.inputMargins}>Params</InputLabel>
+            <RadioGroup name="addParams" value={this.state.addParams} onChange={this.showAddParams} row>
+              <FormControlLabel
+                className={classes.radioMargin}
+                value={true}
+                control={<Radio color="primary" />}
+                labelPlacement="end"
+                label="Yes"
+              />
+              <FormControlLabel
+                className={classes.radioMargin}
+                value={false}
+                control={<Radio color="primary" />}
+                labelPlacement="end"
+                label="No"
+              />
+            </RadioGroup>
+            {
+              this.state.addParams &&
+              <React.Fragment>
+                <Box component="span" display="block">
+                  {this.createUI(classes, "params")}
+                </Box>
+                <div style={{ width: '100%' }}>
+                  <Box component="span" display="block">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={(e) => this.addClick(e, "params")}
+                      className={classes.addRowButton}
+                      startIcon={<AddBoxIcon />}
+                    >
+                      Add
+                    </Button>
+                  </Box>
+                </div>
+              </React.Fragment>
+            }
           </DialogContent>
         </Dialog>
       </div>
     )
-
   }
 }
 

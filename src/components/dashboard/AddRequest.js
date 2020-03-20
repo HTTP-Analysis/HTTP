@@ -179,7 +179,6 @@ class AddRequest extends Component {
       username: "",
       password: "",
       auth_type: "basic",
-      params: {},
       errors: {},
       addAuthInfo: false,
       addHeaderInfo: false,
@@ -190,8 +189,10 @@ class AddRequest extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.errors) {
+    if (Object.keys(newProps.errors).length !== 0) {
       this.setState({ errors: newProps.errors })
+    } else {
+      this.handleClickClose()
     }
   }
 
@@ -419,12 +420,14 @@ class AddRequest extends Component {
 AddRequest.propTypes = {
   auth: PropTypes.object.isRequired,
   addRequest: PropTypes.func.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  requests: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
+  requests: state.requests
 })
 
 export default connect(mapStateToProps, { addRequest })(withStyles(styles)(AddRequest))

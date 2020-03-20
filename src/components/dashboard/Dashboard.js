@@ -91,6 +91,7 @@ class Dashboard extends Component {
     const { requests, loading } = this.props.requests
     const { classes } = this.props
     const { container } = this.props
+    console.log(requests)
 
     const drawer = (
       <div>

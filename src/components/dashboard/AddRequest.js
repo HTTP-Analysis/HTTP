@@ -12,6 +12,8 @@ import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import AppBar from '@material-ui/core/AppBar'
 import TextField from '@material-ui/core/TextField'
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import Box from '@material-ui/core/Box';
 import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -62,6 +64,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 class AddRequest extends Component {
 
   constructor() {
@@ -92,6 +98,7 @@ class AddRequest extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.removeClick = this.removeClick.bind(this)
     this.addClick = this.addClick.bind(this)
+    this.handleSnackbar = this.handleSnackbar.bind(this)
   }
 
   removeClick(i, entity){
@@ -177,6 +184,7 @@ class AddRequest extends Component {
       auth_type: "basic",
       errors: {},
       addAuthInfo: false,
+      snackbar: false,
       addHeaderInfo: false,
       addParams: false,
       headers: [{name: "", value: ""}],
@@ -192,7 +200,12 @@ class AddRequest extends Component {
     const { modalClose } = newProps.requests
     if (modalClose) {
       this.handleClickClose()
+      this.handleSnackbar()
     }
+  }
+
+  handleSnackbar(e) {
+    this.setState({snackbar: !this.state.snackbar})
   }
 
   onChange(e) {
@@ -234,6 +247,16 @@ class AddRequest extends Component {
 
     return (
       <div>
+        <Snackbar
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          open={this.state.snackbar}
+          autoHideDuration={6000}
+          onClose={(e) => this.handleSnackbar(e)}
+        >
+          <Alert severity="success">
+            Your request has been added.
+          </Alert>
+        </Snackbar>
         <Typography onClick={this.handleClickOpen}>
           Add
         </Typography>

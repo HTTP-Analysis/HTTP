@@ -1,8 +1,8 @@
 export const GET_ERRORS = "GET_ERRORS"
 export const CLEAR_ERRORS = 'CLEAR_ERRORS'
 export const SET_CURRENT_USER = "SET_CURRENT_USER"
-export const REQUEST_LOADING = 'REQUEST_LOADING';
-export const GET_REQUESTS = 'GET_REQUESTS';
-export const GET_REQUEST = 'GET_REQUEST';
-export const ADD_REQUEST = 'ADD_REQUEST';
-export const DELETE_REQUEST = 'DELETE_REQUEST';
+export const REQUEST_LOADING = 'REQUEST_LOADING'
+export const GET_REQUESTS = 'GET_REQUESTS'
+export const GET_REQUEST = 'GET_REQUEST'
+export const ADD_REQUEST = 'ADD_REQUEST'
+export const DELETE_REQUEST = 'DELETE_REQUEST'

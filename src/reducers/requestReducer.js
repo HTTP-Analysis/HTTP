@@ -9,7 +9,8 @@ import {
 const initialState = {
   requests: [],
   request: {},
-  loading: false
+  loading: false,
+  modalClose: false
 };
 
 export default function(state = initialState, action) {
@@ -34,7 +35,9 @@ export default function(state = initialState, action) {
     case ADD_REQUEST:
       return {
         ...state,
-        requests: [action.payload, ...state.requests]
+        requests: [action.payload, ...state.requests],
+        modalClose: true,
+        loading: false
       };
     case DELETE_REQUEST:
       return {

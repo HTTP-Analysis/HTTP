@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
@@ -10,19 +9,16 @@ import Dialog from '@material-ui/core/Dialog'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import DialogContent from '@material-ui/core/DialogContent'
 import Radio from '@material-ui/core/Radio'
-import Divider from '@material-ui/core/Divider'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import AppBar from '@material-ui/core/AppBar'
 import TextField from '@material-ui/core/TextField'
 import Box from '@material-ui/core/Box';
-import InputAdornment from '@material-ui/core/InputAdornment'
 import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import Toolbar from '@material-ui/core/Toolbar'
-import HttpIcon from '@material-ui/icons/Http'
 import IconButton from '@material-ui/core/IconButton'
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddBoxIcon from '@material-ui/icons/AddBox';
@@ -189,9 +185,12 @@ class AddRequest extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (Object.keys(newProps.errors).length !== 0) {
+    if (newProps.errors !== this.props.errors) {
       this.setState({ errors: newProps.errors })
-    } else {
+    }
+
+    const { modalClose } = newProps.requests
+    if (modalClose) {
       this.handleClickClose()
     }
   }
@@ -210,10 +209,12 @@ class AddRequest extends Component {
 
   onSubmitSignUp(e) {
     e.preventDefault()
+    const { user } = this.props.auth
 
     const newRequest = {
       request: {
         url: this.state.url,
+        user_id: user.id,
         method: this.state.method,
         auth: this.state.addAuthInfo ? {username: this.state.username, password: this.state.password, auth_type: this.state.auth_type} : {},
         headers: this.state.addHeaderInfo ? this.state.headers : {},
@@ -228,7 +229,6 @@ class AddRequest extends Component {
   }
 
   render() {
-    const { user } = this.props.auth
     const { classes } = this.props
     const { errors } = this.state
 

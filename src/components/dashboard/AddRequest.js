@@ -177,6 +177,7 @@ class AddRequest extends Component {
   clearStateAndForm(e) {
     this.setState({
       open: false,
+      title: "",
       method: "",
       url: "",
       username: "",
@@ -226,6 +227,7 @@ class AddRequest extends Component {
 
     const newRequest = {
       request: {
+        title: this.state.title,
         url: this.state.url,
         user_id: user.id,
         method: this.state.method,
@@ -253,7 +255,7 @@ class AddRequest extends Component {
           autoHideDuration={6000}
           onClose={(e) => this.handleSnackbar(e)}
         >
-          <Alert severity="success">
+          <Alert severity="success" onClose={(e) => this.handleSnackbar(e)}>
             Your request has been added.
           </Alert>
         </Snackbar>
@@ -275,6 +277,17 @@ class AddRequest extends Component {
             </Toolbar>
           </AppBar>
           <DialogContent>
+            <TextField
+              className={classes.inputMargins + " " + classes.marginTop}
+              error={errors.title ? true : false}
+              label="Title"
+              name="title"
+              type="text"
+              fullWidth
+              helperText={errors.title}
+              value={this.state.title}
+              onChange={this.onChange}
+            />
             <TextField
               className={classes.inputMargins + " " + classes.marginTop}
               error={errors.url ? true : false}

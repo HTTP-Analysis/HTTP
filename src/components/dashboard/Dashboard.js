@@ -30,6 +30,8 @@ import { Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
+import ProductCard from "./ProductCard"
+
 const drawerWidth = 240;
 
 const styles = theme => {
@@ -181,52 +183,15 @@ class Dashboard extends Component {
           <div className={classes.toolbar + " " + classes.topRoot}>
             <Grid
               container
-              spacing={4}
+              spacing={3}
             >
               <Grid
-                item
-                lg={3}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
-                GET
-              </Grid>
-              <Grid
-                item
-                lg={3}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
-                POST
-              </Grid>
-              <Grid
-                item
-                lg={3}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
-                UPDATE
-              </Grid>
-              <Grid
-                item
-                lg={3}
-                sm={6}
-                xl={3}
-                xs={12}
-              >
-                DELETE
-              </Grid>
-              <Grid
-                item
-                lg={8}
-                md={12}
-                xl={9}
-                xs={12}
-              >
-                Hollycow
+                  item
+                  lg={4}
+                  md={6}
+                  xs={12}
+                >
+                  <ProductCard />
               </Grid>
             </Grid>
           </div>

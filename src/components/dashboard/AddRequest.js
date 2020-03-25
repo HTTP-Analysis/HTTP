@@ -259,9 +259,13 @@ class AddRequest extends Component {
             Your request has been added.
           </Alert>
         </Snackbar>
-        <Typography onClick={this.handleClickOpen}>
-          Add
-        </Typography>
+        <Button
+          onClick={this.handleClickOpen}
+          color="primary"
+          variant="contained"
+        >
+          Add Request
+        </Button>
         <Dialog fullScreen open={this.state.open} onClose={this.handleClickClose} TransitionComponent={Transition}>
           <AppBar className={classes.appBar}>
             <Toolbar>

@@ -4,9 +4,18 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getRequests } from "../../actions/requestActions"
 
+import { Paper, Input } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
+
 import { logoutUser } from '../../actions/authActions';
 
 import AddRequest from "./AddRequest"
+
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import GetAppIcon from '@material-ui/icons/GetApp';
+
+import { Button } from '@material-ui/core';
+
 
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -25,12 +34,16 @@ import Toolbar from '@material-ui/core/Toolbar';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
 
+import {
+  Card,
+  CardContent,
+  CardActions
+} from '@material-ui/core';
+
 import { Grid } from '@material-ui/core';
 
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-
-import ProductCard from "./ProductCard"
 
 const drawerWidth = 240;
 
@@ -68,6 +81,63 @@ const styles = theme => {
     topRoot: {
       marginTop: "50px"
     },
+    imageContainer: {
+      height: 64,
+      width: 64,
+      margin: '0 auto',
+      border: `1px solid ${theme.palette.divider}`,
+      borderRadius: '5px',
+      overflow: 'hidden',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    image: {
+      width: '100%'
+    },
+    statsItem: {
+      display: 'flex',
+      alignItems: 'center'
+    },
+    statsIcon: {
+      color: theme.palette.icon,
+      marginRight: theme.spacing(1)
+    },
+    row: {
+      height: '42px',
+      display: 'flex',
+      alignItems: 'center',
+      marginTop: theme.spacing(1)
+    },
+    spacer: {
+      flexGrow: 1
+    },
+    importButton: {
+      marginRight: theme.spacing(1)
+    },
+    exportButton: {
+      marginRight: theme.spacing(1)
+    },
+    searchInput: {
+      marginRight: theme.spacing(1)
+    },
+    rootSearch: {
+      borderRadius: '4px',
+      alignItems: 'center',
+      padding: theme.spacing(1),
+      display: 'flex',
+      flexBasis: 420
+    },
+    icon: {
+      marginRight: theme.spacing(1),
+      color: theme.palette.text.secondary
+    },
+    input: {
+      flexGrow: 1,
+      fontSize: '14px',
+      lineHeight: '16px',
+      letterSpacing: '-0.05px'
+    }
   })
 }
 
@@ -106,12 +176,6 @@ class Dashboard extends Component {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          <ListItem button>
-            <ListItemIcon><AddBoxIcon /></ListItemIcon>
-            <ListItemText>
-              <AddRequest />
-            </ListItemText>
-          </ListItem>
           <ListItem button selected>
             <ListItemIcon><HttpIcon /></ListItemIcon>
             <ListItemText primary="Requests" />
@@ -180,19 +244,92 @@ class Dashboard extends Component {
           </Hidden>
         </nav>
         <main className={classes.content}>
+
+          <div className={classes.topRoot}>
+            <div className={classes.row}>
+              <span className={classes.spacer} />
+              <AddRequest />
+            </div>
+            <div className={classes.row}>
+              <Paper
+                className={classes.rootSearch}
+              >
+                <SearchIcon className={classes.icon} />
+                <Input
+                  className={classes.input}
+                  disableUnderline
+                />
+              </Paper>
+            </div>
+          </div>
+
           <div className={classes.toolbar + " " + classes.topRoot}>
             <Grid
               container
               spacing={3}
             >
-              <Grid
-                  item
-                  lg={4}
-                  md={6}
-                  xs={12}
-                >
-                  <ProductCard />
-              </Grid>
+              {requests.map(request => (
+                <Grid
+                    item
+                    lg={4}
+                    md={6}
+                    xs={6}
+                    key={request.id}
+                  >
+                  <Card>
+                    <CardContent>
+                      <div className={classes.imageContainer}>
+                        <EqualizerIcon fontSize="large" />
+                      </div>
+                      <Typography
+                        align="center"
+                        gutterBottom
+                        variant="h4"
+                      >
+                        { request.method }
+                      </Typography>
+                      <Typography
+                        align="center"
+                        variant="body1"
+                      >
+                        { request.title }
+                      </Typography>
+                    </CardContent>
+                    <Divider />
+                    <CardActions>
+                      <Grid
+                        container
+                        justify="space-between"
+                      >
+                        <Grid
+                          className={classes.statsItem}
+                          item
+                        >
+                          <AccessTimeIcon className={classes.statsIcon} />
+                          <Typography
+                            display="inline"
+                            variant="body2"
+                          >
+                            { request.created_at }
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          className={classes.statsItem}
+                          item
+                        >
+                          <GetAppIcon className={classes.statsIcon} />
+                          <Typography
+                            display="inline"
+                            variant="body2"
+                          >
+                            4 Downloads
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
             </Grid>
           </div>
         </main>

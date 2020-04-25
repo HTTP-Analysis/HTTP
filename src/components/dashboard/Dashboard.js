@@ -1,51 +1,54 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import moment from "moment"
+import { connect } from 'react-redux'
 import { getRequests } from "../../actions/requestActions"
 
-import { Paper, Input } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
+import { Paper, Input } from '@material-ui/core'
+import SearchIcon from '@material-ui/icons/Search'
 
-import { logoutUser } from '../../actions/authActions';
+import { logoutUser } from '../../actions/authActions'
 
 import AddRequest from "./AddRequest"
 
-import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import GetAppIcon from '@material-ui/icons/GetApp';
+import AccessTimeIcon from '@material-ui/icons/AccessTime'
+import GetAppIcon from '@material-ui/icons/GetApp'
 
-import { Button } from '@material-ui/core';
+import { Button } from '@material-ui/core'
 
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
-import HttpIcon from '@material-ui/icons/Http';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuIcon from '@material-ui/icons/Menu';
-import Toolbar from '@material-ui/core/Toolbar';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import EqualizerIcon from '@material-ui/icons/Equalizer';
+import AppBar from '@material-ui/core/AppBar'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Divider from '@material-ui/core/Divider'
+import Drawer from '@material-ui/core/Drawer'
+import AddBoxIcon from '@material-ui/icons/AddBox'
+import Hidden from '@material-ui/core/Hidden'
+import IconButton from '@material-ui/core/IconButton'
+import HttpIcon from '@material-ui/icons/Http'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import MenuIcon from '@material-ui/icons/Menu'
+import Toolbar from '@material-ui/core/Toolbar'
+import DeleteIcon from '@material-ui/icons/Delete'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import EqualizerIcon from '@material-ui/icons/Equalizer'
 
 import {
   Card,
   CardContent,
   CardActions
-} from '@material-ui/core';
+} from '@material-ui/core'
 
-import { Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core'
 
-import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography'
+import { withStyles } from '@material-ui/core/styles'
 
-const drawerWidth = 240;
+const drawerWidth = 240
 
 const styles = theme => {
   return ({
@@ -144,8 +147,8 @@ const styles = theme => {
 class Dashboard extends Component {
 
   onLogoutClick(e) {
-    e.preventDefault();
-    this.props.logoutUser();
+    e.preventDefault()
+    this.props.logoutUser()
   }
 
   componentDidMount() {
@@ -191,7 +194,7 @@ class Dashboard extends Component {
           </ListItem>
         </List>
       </div>
-    );
+    )
 
     return (
       <div className={classes.root}>
@@ -310,20 +313,15 @@ class Dashboard extends Component {
                             display="inline"
                             variant="body2"
                           >
-                            { request.created_at }
+                            { moment(request.created_at).fromNow() }
                           </Typography>
                         </Grid>
                         <Grid
                           className={classes.statsItem}
                           item
                         >
-                          <GetAppIcon className={classes.statsIcon} />
-                          <Typography
-                            display="inline"
-                            variant="body2"
-                          >
-                            4 Downloads
-                          </Typography>
+                          <DeleteIcon className={classes.statsIcon} />
+                          <OpenInNewIcon className={classes.statsIcon} />
                         </Grid>
                       </Grid>
                     </CardActions>
@@ -334,7 +332,7 @@ class Dashboard extends Component {
           </div>
         </main>
       </div>
-    );
+    )
 
   }
 }
@@ -345,12 +343,12 @@ Dashboard.propTypes = {
   container: PropTypes.any,
   logoutUser: PropTypes.func.isRequired,
   requests: PropTypes.object.isRequired
-};
+}
 
 const mapStateToProps = state => ({
   auth: state.auth,
   requests: state.requests
-});
+})
 
 export default connect(mapStateToProps, { getRequests, logoutUser })(withStyles(styles)(Dashboard))
 
